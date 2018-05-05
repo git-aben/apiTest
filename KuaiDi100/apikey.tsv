@@ -1,0 +1,46 @@
+*Settings*							
+Library	RequestsLibrary						
+Library	Selenium2Library						
+Library	My_Library						
+Library	Verification_Library						
+							
+*Keywords*							
+GetApiTest	[Arguments]	${api}	${params}	${expect}	${failmsg}=	# 请求地址|接口入参|期望响应|断言失败消息	
+	[Documentation]	GetApiTestt：入参接口名 user-agent 接口入参 期望值 自定义错误信息					
+	${envRunUrl}=	Set Variable	http://www.kuaidi100.com				
+	${envRunUri}=	Set Variable	${api}				
+	Set Test Documentation	\n\n 接口名：${api}\n\n接口入参：${params}\n\n	true				
+	${header}	create dictionary	Content-Type=application/json;charset=UTF-8				
+	create session	url	${envRunUrl}	${header}			
+	${uriparams}	Set Variable	${params}				
+	${addr}	get request	url	${envRunUri}	params=${uriparams}		
+	should be equal as strings	${addr.status_code}	200				
+	${evalutestatus}	${addr.contentutf8cn}	run keyword and ignore error	evaluate	'${addr.content}'.decode('utf-8')		
+	${actualdata}	set variable if	'${evalutestatus}'=='PASS'	${addr.contentutf8cn}	${addr.content}		
+	log	${actualdata}					
+	${responsedata}	to json	${addr.content}				
+	${returnResponseData}	get variable value	${responsedata}				
+	${expectdata}	to json	${expect}				
+	diffjson contains	${expectdata}	${responsedata}	${failmsg}:\n实际响应：${actualdata}\n期望响应：${expectdata}			
+	delete all sessions						
+	[Return]	${returnResponseData}	# 返回响应数据json				
+							
+PostApiTest	[Arguments]	${api}	${params}	${expect}	${failmsg}=	# 请求地址|user-agent|接口入参|期望响应|断言失败消息	
+	[Documentation]	PostApiTestt：入参接口名 user-agent 接口入参 期望值 自定义错误信息					
+	${envRunUrl}=	Set Variable	http://www.kuaidi100.com				
+	${envRunUri}=	Set Variable	${api}				
+	Set Test Documentation	\n\n 接口名：${api}\n\n接口入参：${params}\n\n	true				
+	${header}	create dictionary	Content-Type=application/json;charset=UTF-8	"User-Agent={""id"":int,""uid"":string,""openid"":string,""token"":string,""lastUid"":string,""platform"":int}"			
+	create session	url	${envRunUrl}	${header}			
+	${uriparams}	Set Variable	${params}				
+	${addr}	post request	url	${envRunUri}	params=${uriparams}		
+	should be equal as strings	${addr.status_code}	200				
+	${evalutestatus}	${addr.contentutf8cn}	run keyword and ignore error	evaluate	'${addr.content}'.decode('utf-8')		
+	${actualdata}	set variable if	'${evalutestatus}'=='PASS'	${addr.contentutf8cn}	${addr.content}		
+	log	${actualdata}					
+	${responsedata}	to json	${addr.content}				
+	${returnResponseData}	get variable value	${responsedata}				
+	${expectdata}	to json	${expect}				
+	diffjson contains	${expectdata}	${responsedata}	${failmsg}:\n实际响应：${actualdata}\n期望响应：${expectdata}			
+	delete all sessions						
+	[Return]	${returnResponseData}	# 返回响应数据json				
