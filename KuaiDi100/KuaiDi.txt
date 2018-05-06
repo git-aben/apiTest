@@ -11,3 +11,13 @@ Resource          apikey.tsv
     [Documentation]    用例说明：get请求查询医生基本信息/期望返回成功
     [Tags]    run all    zbq
     GetApiTest    query    type=shentong&postid=33    {"message":"参数错误","nu":"","ischeck":"0","condition":"","com":"","status":"400","state":"0","data":[]}
+
+03_query_查询快递信息失败
+    [Documentation]    用例说明：get请求查询医生基本信息/期望返回成功
+    [Tags]    run all    zbq
+    GetApiTest    query    type=ems&postid=33    {"message":"参数错误","nu":"","ischeck":"0","condition":"","com":"","status":"400","state":"0","data":[]}
+
+04_query_查询快递信息成功
+    [Documentation]    用例说明：get请求查询医生基本信息/期望返回成功
+    [Tags]    run all    zbq
+    GetApiTest    query    type=yuantong&postid=889243939616249836    {"message":"ok","nu":"889243939616249836","ischeck":"1","condition":"F00","com":"yuantong","status":"200","state":"3"}
